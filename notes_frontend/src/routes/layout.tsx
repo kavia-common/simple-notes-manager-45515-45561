@@ -1,20 +1,22 @@
-import { component$, Slot, useStyles$ } from "@builder.io/qwik";
-import type { RequestHandler } from "@builder.io/qwik-city";
-import styles from "./styles.css?inline";
+import { component$, Slot, useStyles$ } from '@builder.io/qwik';
+import { Header } from '~/components/header/header';
+import { Sidebar } from '~/components/sidebar/sidebar';
+import { useNotesProvider } from '~/hooks/use-notes';
+import styles from './styles.css?inline';
 
-export const onGet: RequestHandler = async ({ cacheControl }) => {
-  cacheControl({
-    staleWhileRevalidate: 60 * 60 * 24 * 7,
-    maxAge: 5,
-  });
-};
-
-// PUBLIC_INTERFACE
 export default component$(() => {
   useStyles$(styles);
+  useNotesProvider();
+
   return (
-    <main>
-      <Slot />
-    </main>
+    <div class="app-layout">
+      <Header />
+      <div class="main-wrapper">
+        <Sidebar />
+        <main class="main-content">
+          <Slot />
+        </main>
+      </div>
+    </div>
   );
 });
